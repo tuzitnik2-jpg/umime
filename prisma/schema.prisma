@@ -22,6 +22,9 @@ model User {
   // takže sem lze později přidat odznaky, žebříčky, odměny apod.
   points Int @default(0)
 
+  // Kdy uživatel naposledy roztočil kolo štěstí v obchodě (pro denní limit).
+  lastWheelSpinAt DateTime?
+
   accounts Account[]
   sessions Session[]
 

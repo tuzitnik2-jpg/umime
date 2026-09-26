@@ -7,6 +7,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, locales, type Locale } from "@/i18n/config";
 import { notFound } from "next/navigation";
+import { THEME_INIT_SCRIPT } from "@/lib/theme-init-script";
 
 const baloo = Baloo_2({
   subsets: ["latin", "latin-ext"],
@@ -40,9 +41,19 @@ export default async function LocaleLayout({
   const dict = getDictionary(locale as Locale);
 
   return (
-    <html lang={locale} className={`h-full antialiased ${baloo.variable} ${inter.variable}`}>
-      <body className="min-h-full flex flex-col text-[var(--foreground)]" style={{ fontFamily: "var(--font-body), var(--font-sans)" }}>
-        <header className="sticky top-0 z-40 border-b border-[var(--border-soft)] bg-white/80 backdrop-blur-md">
+    <html
+      lang={locale}
+      suppressHydrationWarning
+      className={`h-full antialiased ${baloo.variable} ${inter.variable}`}
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
+      <body
+        className="min-h-full flex flex-col text-[var(--foreground)]"
+        style={{ fontFamily: "var(--font-body), var(--font-sans)" }}
+      >
+        <header className="sticky top-0 z-40 border-b border-[var(--border-soft)] bg-[var(--surface)]/80 backdrop-blur-md">
           <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-4">
             <div className="flex items-center justify-between">
               <Link
@@ -53,6 +64,22 @@ export default async function LocaleLayout({
                 <span className="gradient-text">Umíme</span> 🎓
               </Link>
               <div className="flex items-center gap-3 text-sm font-medium">
+                <Link
+                  href={`/${locale}/obchod`}
+                  aria-label={dict.nav.shop}
+                  title={dict.nav.shop}
+                  className="rounded-full p-2 text-lg leading-none transition-transform hover:scale-110 hover:bg-[var(--surface-muted)]"
+                >
+                  🛍️
+                </Link>
+                <Link
+                  href={`/${locale}/nastaveni`}
+                  aria-label={dict.nav.settings}
+                  title={dict.nav.settings}
+                  className="rounded-full p-2 text-lg leading-none transition-transform hover:scale-110 hover:bg-[var(--surface-muted)]"
+                >
+                  ⚙️
+                </Link>
                 <LanguageSwitcher current={locale as Locale} />
                 <Link
                   href={`/${locale}/prihlaseni`}
@@ -72,7 +99,7 @@ export default async function LocaleLayout({
           </div>
         </header>
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-[var(--border-soft)] bg-white py-8 text-center text-sm text-[var(--foreground)]/50">
+        <footer className="border-t border-[var(--border-soft)] bg-[var(--surface)] py-8 text-center text-sm text-[var(--foreground)]/50">
           &copy; {new Date().getFullYear()} {dict.footer.rights}
         </footer>
       </body>

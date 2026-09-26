@@ -25,7 +25,13 @@ export default async function KurzyPage({
       <h1 className="mb-2 text-3xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>
         {dict.kurzyPage.title}
       </h1>
-      <p className="mb-8 text-[var(--foreground)]/60">{dict.kurzyPage.subtitle}</p>
+      <p className="mb-4 text-[var(--foreground)]/60">{dict.kurzyPage.subtitle}</p>
+      <Link
+        href={`/${locale}/kurzy/sablony`}
+        className="mb-8 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--brand-600)] hover:underline"
+      >
+        🧪 {dict.templates.title} →
+      </Link>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {CATEGORIES.map((cat) => (
           <Link

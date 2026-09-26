@@ -32,7 +32,7 @@ export function LanguageSwitcher({ current }: { current: Locale }) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1.5 rounded-full border border-[var(--border-soft)] bg-white px-3 py-1.5 text-sm font-medium transition-transform hover:scale-105 hover:border-[var(--brand-100)]"
+        className="flex items-center gap-1.5 rounded-full border border-[var(--border-soft)] bg-[var(--surface)] px-3 py-1.5 text-sm font-medium transition-transform hover:scale-105 hover:border-[var(--brand-100)]"
         aria-label="Change language"
       >
         <span className="text-base leading-none">{localeFlags[current]}</span>
@@ -40,7 +40,7 @@ export function LanguageSwitcher({ current }: { current: Locale }) {
         <span className="text-xs text-[var(--foreground)]/40">▾</span>
       </button>
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-44 overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white p-1.5 shadow-xl">
+        <div className="absolute right-0 z-50 mt-2 w-44 overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--surface)] p-1.5 shadow-xl">
           {locales.map((locale) => (
             <button
               key={locale}

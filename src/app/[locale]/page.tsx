@@ -53,7 +53,7 @@ export default async function Home({
             </Link>
             <Link
               href={`/${locale}/registrace`}
-              className="btn-bouncy rounded-full border border-[var(--border-soft)] bg-white px-6 py-3 text-sm font-semibold hover:bg-[var(--surface-muted)]"
+              className="btn-bouncy rounded-full border border-[var(--border-soft)] bg-[var(--surface)] px-6 py-3 text-sm font-semibold hover:bg-[var(--surface-muted)]"
             >
               {dict.home.createAccount}
             </Link>

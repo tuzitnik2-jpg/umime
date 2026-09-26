@@ -17,6 +17,64 @@
   --surface: #ffffff;
   --surface-muted: #f0eefc;
   --border-soft: #e5e1fb;
+  --danger: #dc2626;
+  --font-scale: 1;
+}
+
+html {
+  font-size: calc(16px * var(--font-scale));
+}
+
+:root[data-font-size="small"] {
+  --font-scale: 0.9;
+}
+
+:root[data-font-size="large"] {
+  --font-scale: 1.15;
+}
+
+html[data-font="classic"] {
+  --font-heading: var(--font-body);
+}
+
+/* Tmavý režim: ruční přepnutí (data-theme) i podle systému, když uživatel
+   nic explicitně nevybral. */
+:root[data-theme="dark"] {
+  --background: #14121f;
+  --foreground: #f1eefc;
+  --brand-50: #2a2350;
+  --brand-100: #372c66;
+  --brand-500: #8b7bfb;
+  --brand-600: #a292ff;
+  --brand-700: #c7bdff;
+  --accent-500: #ff7e90;
+  --accent-yellow: #ffc861;
+  --accent-green: #4ade80;
+  --accent-blue: #5ec8fb;
+  --surface: #1e1b31;
+  --surface-muted: #262140;
+  --border-soft: #352c56;
+  --danger: #ff8080;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    --background: #14121f;
+    --foreground: #f1eefc;
+    --brand-50: #2a2350;
+    --brand-100: #372c66;
+    --brand-500: #8b7bfb;
+    --brand-600: #a292ff;
+    --brand-700: #c7bdff;
+    --accent-500: #ff7e90;
+    --accent-yellow: #ffc861;
+    --accent-green: #4ade80;
+    --accent-blue: #5ec8fb;
+    --surface: #1e1b31;
+    --surface-muted: #262140;
+    --border-soft: #352c56;
+    --danger: #ff8080;
+  }
 }
 
 @theme inline {
@@ -31,6 +89,7 @@
   --color-accent-yellow: var(--accent-yellow);
   --color-accent-green: var(--accent-green);
   --color-accent-blue: var(--accent-blue);
+  --color-danger: var(--danger);
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
     sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
@@ -43,6 +102,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* --- Sdílené utility třídy pro veselý, hravý vzhled --- */
