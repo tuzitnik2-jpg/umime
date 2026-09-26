@@ -1,7 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { CATEGORIES, LANGUAGES, getCategoryBySlug } from "@/lib/taxonomy";
+import {
+  CATEGORIES,
+  LANGUAGES,
+  getCategoryBySlug,
+  type LanguageCode,
+} from "@/lib/taxonomy";
 
 export const revalidate = 0;
 
@@ -26,13 +31,19 @@ export default async function CategoryPage({
   const category = getCategoryBySlug(categorySlug);
   if (!category) notFound();
 
+  // Ověříme, že hodnota z URL je platný jazyk (LANGUAGES je zdroj pravdy),
+  // ať nikdy nepošleme do Prisma libovolný string z query parametru.
+  const selectedLanguage = LANGUAGES.find((l) => l.value === jazyk)?.value as
+    | LanguageCode
+    | undefined;
+
   let courses: Course[] = [];
   try {
     courses = await prisma.course.findMany({
       where: {
         published: true,
         category: category.value,
-        ...(jazyk ? { language: jazyk as Course["language"] } : {}),
+        ...(selectedLanguage ? { language: selectedLanguage } : {}),
       },
       orderBy: { createdAt: "desc" },
       select: {
