@@ -1,46 +1,27 @@
-import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { CATEGORIES } from "@/lib/taxonomy";
 
-export const revalidate = 0;
-
-export default async function KurzyPage() {
-  let courses: { id: string; title: string; slug: string; description: string | null }[] = [];
-
-  try {
-    courses = await prisma.course.findMany({
-      where: { published: true },
-      orderBy: { createdAt: "desc" },
-    });
-  } catch {
-    // Database not yet configured (e.g. local dev without DATABASE_URL).
-    courses = [];
-  }
-
+export default function KurzyPage() {
   return (
-    <div className="mx-auto max-w-5xl px-6 py-16">
-      <h1 className="mb-8 text-3xl font-bold">Kurzy</h1>
-
-      {courses.length === 0 ? (
-        <p className="text-zinc-500">
-          Momentálně nejsou k dispozici žádné publikované kurzy. Jakmile bude
-          připojena databáze a přidán obsah, kurzy se zobrazí zde.
-        </p>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2">
-          {courses.map((course) => (
-            <div
-              key={course.id}
-              className="rounded-lg border border-zinc-200 bg-white p-6"
-            >
-              <h2 className="text-xl font-semibold">{course.title}</h2>
-              {course.description && (
-                <p className="mt-2 text-sm text-zinc-600">
-                  {course.description}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+    <div className="mx-auto max-w-6xl px-6 py-16">
+      <h1 className="mb-2 text-3xl font-bold">Kurzy</h1>
+      <p className="mb-8 text-[var(--foreground)]/60">
+        Vyber si sekci, kterou se chceš učit.
+      </p>
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {CATEGORIES.map((cat) => (
+          <Link
+            key={cat.slug}
+            href={`/kurzy/${cat.slug}`}
+            className="card card-hover flex flex-col gap-2 p-6"
+          >
+            <h2 className="text-lg font-semibold">{cat.label}</h2>
+            <p className="text-sm text-[var(--foreground)]/60">
+              {cat.description}
+            </p>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,26 +1,85 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f6f5ff;
+  --foreground: #1c1a2e;
+
+  /* Moderní fialovo-modrá paleta */
+  --brand-50: #f2f0ff;
+  --brand-100: #e6e1ff;
+  --brand-500: #6d5bf6;
+  --brand-600: #5a45f0;
+  --brand-700: #4834c9;
+  --accent-500: #f6465d;
+  --surface: #ffffff;
+  --surface-muted: #f0eefc;
+  --border-soft: #e5e1fb;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-accent-500: var(--accent-500);
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* --- Sdílené utility třídy pro moderní, konzistentní vzhled --- */
+
+.gradient-hero {
+  background: radial-gradient(
+      circle at 15% 20%,
+      rgba(109, 91, 246, 0.25),
+      transparent 45%
+    ),
+    radial-gradient(circle at 85% 0%, rgba(246, 70, 93, 0.18), transparent 40%),
+    linear-gradient(180deg, #ffffff 0%, #f6f5ff 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, var(--brand-600), var(--accent-500));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(28, 26, 46, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(90, 69, 240, 0.25);
+  border-color: var(--brand-100);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.points-badge {
+  background: linear-gradient(90deg, var(--brand-500), var(--accent-500));
+  color: white;
+  font-weight: 700;
 }

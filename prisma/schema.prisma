@@ -18,11 +18,16 @@ model User {
   password      String? // hashed password, for credentials login
   role          Role      @default(STUDENT)
 
+  // Bodový systém — aktuální zůstatek bodů. Historie je v PointTransaction,
+  // takže sem lze později přidat odznaky, žebříčky, odměny apod.
+  points Int @default(0)
+
   accounts Account[]
   sessions Session[]
 
-  enrollments Enrollment[]
-  progress    LessonProgress[]
+  enrollments      Enrollment[]
+  progress         LessonProgress[]
+  pointTransactions PointTransaction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -72,18 +77,39 @@ model VerificationToken {
 
 // --- Education domain ---
 
+// Sekce webu: základní škola, střední škola, přípravy na přijímačky, maturita.
+enum Category {
+  ZAKLADNI
+  STREDNI
+  PRIJIMACKY
+  MATURITA
+}
+
+// Jazyky/předměty, podle kterých lze kurzy filtrovat. Snadno rozšiřitelné
+// o další zkratky podle potřeby.
+enum Language {
+  CJ // Český jazyk
+  NJ // Německý jazyk
+  RS // Ruský jazyk
+  AJ // Anglický jazyk
+}
+
 model Course {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
-  slug        String   @unique
+  slug        String    @unique
   description String?
-  published   Boolean  @default(false)
+  published   Boolean   @default(false)
+  category    Category
+  language    Language?
 
   lessons     Lesson[]
   enrollments Enrollment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([category, language])
 }
 
 model Lesson {
@@ -123,4 +149,22 @@ model LessonProgress {
   lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@unique([userId, lessonId])
+}
+
+// --- Bodový systém ---
+
+// Každá změna bodů (dokončená lekce, kvíz, denní bonus, budoucí odměny…)
+// se zapíše sem jako jeden řádek. User.points je běžící součet pro rychlé
+// čtení; tahle tabulka drží historii a je místo, kam se dá připojit
+// cokoliv dalšího (typy odměn, vypršení bodů, žebříčky apod.).
+model PointTransaction {
+  id        String   @id @default(cuid())
+  userId    String
+  amount    Int // kladné = přičtení, záporné = odečtení
+  reason    String // např. "Dokončená lekce", "Bonus za přihlášení"
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
