@@ -103,6 +103,7 @@ model Course {
   category    Category
   language    Language?
 
+  levels      Level[]
   lessons     Lesson[]
   enrollments Enrollment[]
 
@@ -110,6 +111,25 @@ model Course {
   updatedAt DateTime @updatedAt
 
   @@index([category, language])
+}
+
+// Kurz je rozdělený na levely, kterými žák prochází postupně (podobně jako
+// v Duolingu). Zatím jde jen o kostru — obsah jednotlivých levelů (lekce,
+// cvičení) se bude doplňovat postupně přes `Lesson`/`LessonProgress` napojené
+// na konkrétní level, případně přímo v poli `content` až přijde čas.
+model Level {
+  id        String  @id @default(cuid())
+  title     String
+  order     Int     @default(0)
+  published Boolean @default(false)
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([courseId, order])
 }
 
 model Lesson {

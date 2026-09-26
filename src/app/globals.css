@@ -4,13 +4,16 @@
   --background: #f6f5ff;
   --foreground: #1c1a2e;
 
-  /* Moderní fialovo-modrá paleta */
+  /* Veselá fialovo-modrá paleta s barevnými akcenty */
   --brand-50: #f2f0ff;
   --brand-100: #e6e1ff;
   --brand-500: #6d5bf6;
   --brand-600: #5a45f0;
   --brand-700: #4834c9;
   --accent-500: #f6465d;
+  --accent-yellow: #ffb020;
+  --accent-green: #22c55e;
+  --accent-blue: #22b8f6;
   --surface: #ffffff;
   --surface-muted: #f0eefc;
   --border-soft: #e5e1fb;
@@ -25,27 +28,94 @@
   --color-brand-600: var(--brand-600);
   --color-brand-700: var(--brand-700);
   --color-accent-500: var(--accent-500);
+  --color-accent-yellow: var(--accent-yellow);
+  --color-accent-green: var(--accent-green);
+  --color-accent-blue: var(--accent-blue);
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
     sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  overflow-x: hidden;
 }
 
-/* --- Sdílené utility třídy pro moderní, konzistentní vzhled --- */
+/* --- Sdílené utility třídy pro veselý, hravý vzhled --- */
 
 .gradient-hero {
+  position: relative;
   background: radial-gradient(
       circle at 15% 20%,
-      rgba(109, 91, 246, 0.25),
+      rgba(109, 91, 246, 0.28),
       transparent 45%
     ),
-    radial-gradient(circle at 85% 0%, rgba(246, 70, 93, 0.18), transparent 40%),
+    radial-gradient(circle at 85% 0%, rgba(246, 70, 93, 0.2), transparent 40%),
+    radial-gradient(circle at 60% 85%, rgba(34, 184, 246, 0.16), transparent 45%),
     linear-gradient(180deg, #ffffff 0%, #f6f5ff 100%);
+  overflow: hidden;
+}
+
+.gradient-hero::before,
+.gradient-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(0px);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gradient-hero::before {
+  width: 3.5rem;
+  height: 3.5rem;
+  top: 12%;
+  left: 8%;
+  background: var(--accent-yellow);
+  animation: float-blob 7s ease-in-out infinite;
+}
+
+.gradient-hero::after {
+  width: 2.5rem;
+  height: 2.5rem;
+  bottom: 15%;
+  right: 10%;
+  background: var(--accent-green);
+  animation: float-blob 9s ease-in-out infinite reverse;
+}
+
+.gradient-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes float-blob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-18px) rotate(12deg);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+.wiggle-on-hover:hover {
+  animation: wiggle 0.4s ease-in-out;
 }
 
 .gradient-text {
@@ -58,14 +128,15 @@ body {
 .card {
   background: var(--surface);
   border: 1px solid var(--border-soft);
-  border-radius: 1rem;
+  border-radius: 1.25rem;
   box-shadow: 0 1px 2px rgba(28, 26, 46, 0.04);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px -8px rgba(90, 69, 240, 0.25);
+  transform: translateY(-4px) scale(1.02) rotate(-0.5deg);
+  box-shadow: 0 16px 30px -10px rgba(90, 69, 240, 0.3);
   border-color: var(--brand-100);
 }
 
@@ -82,4 +153,31 @@ body {
   background: linear-gradient(90deg, var(--brand-500), var(--accent-500));
   color: white;
   font-weight: 700;
+}
+
+.btn-bouncy {
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-bouncy:hover {
+  transform: scale(1.06) rotate(-1deg);
+}
+
+.btn-bouncy:active {
+  transform: scale(0.97);
+}
+
+/* Level path (kurzy) */
+
+.level-card {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.level-card.is-unlocked:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+
+.level-card.is-locked {
+  opacity: 0.55;
+  filter: grayscale(0.3);
 }

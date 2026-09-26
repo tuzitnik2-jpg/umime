@@ -1,0 +1,46 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { CATEGORIES, type CategorySlug } from "@/lib/taxonomy";
+import { getDictionary } from "@/i18n/dictionaries";
+import { isLocale, type Locale } from "@/i18n/config";
+
+const CATEGORY_EMOJI: Record<CategorySlug, string> = {
+  zakladni: "📘",
+  stredni: "🎒",
+  prijimacky: "🎯",
+  maturita: "🎓",
+};
+
+export default async function KurzyPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const dict = getDictionary(locale as Locale);
+
+  return (
+    <div className="mx-auto max-w-6xl px-6 py-16">
+      <h1 className="mb-2 text-3xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>
+        {dict.kurzyPage.title}
+      </h1>
+      <p className="mb-8 text-[var(--foreground)]/60">{dict.kurzyPage.subtitle}</p>
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {CATEGORIES.map((cat) => (
+          <Link
+            key={cat.slug}
+            href={`/${locale}/kurzy/${cat.slug}`}
+            className="card card-hover flex flex-col gap-2 p-6"
+          >
+            <span className="text-2xl">{CATEGORY_EMOJI[cat.slug]}</span>
+            <h2 className="text-lg font-semibold">{dict.categories[cat.slug].label}</h2>
+            <p className="text-sm text-[var(--foreground)]/60">
+              {dict.categories[cat.slug].description}
+            </p>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}

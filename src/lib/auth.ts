@@ -4,12 +4,13 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "@/lib/prisma";
+import { defaultLocale } from "@/i18n/config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   pages: {
-    signIn: "/prihlaseni",
+    signIn: `/${defaultLocale}/prihlaseni`,
   },
   providers: [
     Credentials({
